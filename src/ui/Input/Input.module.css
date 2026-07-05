@@ -1,0 +1,33 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.input {
+  background: #222;
+  border: 1px solid #333;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.inputError {
+  border-color: #f44336;
+}
+
+.errorText {
+  color: #f44336;
+  font-size: 0.85rem;
+  align-self: flex-start;
+}
