@@ -1,0 +1,186 @@
+.page {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  color: white;
+}
+
+.title {
+  margin-bottom: 30px;
+}
+
+.profileSection {
+  background: #111;
+  border-radius: 12px;
+  padding: 30px;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #333;
+}
+
+.info h2 {
+  margin: 0 0 10px 0;
+  font-size: 2rem;
+}
+
+.info p {
+  color: #aaa;
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+}
+
+.roleTag {
+  display: inline-block;
+  background: #333;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem !important;
+  color: white !important;
+  margin-bottom: 20px !important;
+}
+
+.editBtn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.editBtn:hover {
+  background: #45a049;
+}
+
+/* Form Styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+
+.input {
+  background: #222;
+  border: 1px solid #444;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.saveBtn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cancelBtn {
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #555;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancelBtn:hover {
+  background: #222;
+}
+
+/* Orders Styles */
+.ordersSection h2 {
+  margin-bottom: 20px;
+}
+
+.empty {
+  color: #aaa;
+}
+
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.orderCard {
+  background: #111;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #333;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.orderTotal {
+  color: #4CAF50;
+  font-size: 1.2rem;
+}
+
+.orderItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.orderItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #222;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.orderItemImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.orderItemTitle {
+  color: white;
+  text-decoration: none;
+}
+
+.orderItemTitle:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .profileSection {
+    flex-direction: column;
+    text-align: center;
+  }
+}
