@@ -1,10 +1,68 @@
 import styles from "./HomePage.module.css";
+import { useStore } from "../../contexts/StoreContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 
 export function HomePage() {
+  const { tours, cart, favorites, toggleFavorite, addToCart } = useStore();
+  const { role } = useAuth();
+  const navigate = useNavigate();
+
+  const handleFavoriteClick = (e: React.MouseEvent, tourId: number) => {
+    e.preventDefault(); 
+    if (role === "guest") {
+      navigate("/login");
+      return;
+    }
+    toggleFavorite(tourId);
+  };
+
+  const handleCartClick = (e: React.MouseEvent, tourId: number) => {
+    e.preventDefault();
+    if (role === "guest") {
+      navigate("/login");
+      return;
+    }
+    const tour = tours.find(t => t.id === tourId);
+    if (!tour) return;
+    addToCart(tour);
+  };
+
   return (
-    <div style={{ color: 'white', padding: '50px', textAlign: 'center' }}>
-      <h1>HomePage</h1>
-      <p>Страница находится в разработке...</p>
+    <div className={styles.home}>
+      <h1 className={styles.title}>Все туры</h1>
+      <div className={styles.grid}>
+        {tours.map((tour) => {
+          const inCart = cart.some(c => c.id === tour.id);
+          return (
+            <Link key={tour.id} to={`/tour/${tour.id}`} className={styles.card}>
+              <button
+                className={`${styles.favoriteBtn} ${
+                  favorites.includes(tour.id) ? styles.active : ""
+                }`}
+                onClick={(e) => handleFavoriteClick(e, tour.id)}
+              >
+                \u2665
+              </button>
+              <img className={styles.image} src={tour.image} alt={tour.title} />
+              <div className={styles.info}>
+                <div className={styles.infoText}>
+                  <h3 className={styles.tourTitle}>{tour.title}</h3>
+                  <p className={styles.price}>${tour.price}</p>
+                </div>
+                <button
+                  className={`${styles.cartIconBtn} ${
+                    inCart ? styles.activeCart : ""
+                  }`}
+                  onClick={(e) => handleCartClick(e, tour.id)}
+                >
+                  \uD83D\uDED2
+                </button>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 }

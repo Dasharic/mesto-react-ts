@@ -1,0 +1,61 @@
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useStore } from "../../contexts/StoreContext";
+import styles from "./Header.module.css";
+
+export function Header() {
+  const { role, profile, logout } = useAuth();
+  const { cart, favorites } = useStore();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  return (
+    <header className={styles.header}>
+      <div className={styles.logo}>
+        <NavLink to="/" className={styles.logoLink}>Mesto Tours</NavLink>
+      </div>
+      
+      <nav className={styles.nav}>
+        <NavLink to="/" className={({ isActive }) => (isActive ? styles.active : styles.link)}>
+          Главная
+        </NavLink>
+        
+        {role !== "guest" && (
+          <NavLink to="/favorites" className={({ isActive }) => (isActive ? styles.active : styles.link)}>
+            Избранное ({favorites.length})
+          </NavLink>
+        )}
+        
+        {role !== "guest" && (
+          <NavLink to="/cart" className={({ isActive }) => (isActive ? styles.active : styles.link)}>
+            Корзина ({cart.length})
+          </NavLink>
+        )}
+        
+        {role === "admin" && (
+          <NavLink to="/admin" className={({ isActive }) => (isActive ? styles.active : styles.link)}>
+            Админка
+          </NavLink>
+        )}
+      </nav>
+      
+      <div className={styles.auth}>
+        {role === "guest" ? (
+          <NavLink to="/login" className={styles.loginBtn}>Войти</NavLink>
+        ) : (
+          <div className={styles.userInfo}>
+            <NavLink to="/profile" className={styles.profileLink}>
+              <img src={profile.avatar} alt="Avatar" className={styles.avatarMini} />
+              <span className={styles.userName}>{profile.name}</span>
+            </NavLink>
+            <button onClick={handleLogout} className={styles.logoutBtn}>Выйти</button>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}
