@@ -1,0 +1,83 @@
+.profile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.profileInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: url("https://i.pravatar.cc/150?img=3") center/cover;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  margin: 0;
+  font-size: 18px;
+}
+
+.about {
+  margin: 0;
+  font-size: 14px;
+  color: gray;
+}
+
+.baseButton {
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: #eee;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: 0.2s;
+}
+
+.baseButton:hover {
+  background: #ddd;
+}
+
+.editButton {
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+}
+
+.addButton {
+  width: 120px;
+  height: 50px;
+  font-size: 24px;
+}
+
+.profileActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.favoriteButton {
+  height: 50px;
+  padding: 0 20px;
+  font-size: 14px;
+}
