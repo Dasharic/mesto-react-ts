@@ -134,5 +134,19 @@ export const api = {
     
     if (!user) throw new Error("Неверный токен");
     return { role: user.role, profile: user.profile };
+  },
+
+  async updateProfile(token: string, data: Partial<UserProfile>): Promise<void> {
+    await delay(300);
+    if (token === "admin_token_123") return;
+    const email = token.replace("token_", "");
+    const saved = localStorage.getItem("auth_users");
+    const users = saved ? JSON.parse(saved) : [];
+    
+    const userIndex = users.findIndex((u: any) => u.email === email);
+    if (userIndex !== -1) {
+      users[userIndex].profile = { ...users[userIndex].profile, ...data };
+      localStorage.setItem("auth_users", JSON.stringify(users));
+    }
   }
 };

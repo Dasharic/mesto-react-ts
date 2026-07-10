@@ -12,7 +12,7 @@ interface AuthState {
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  updateProfile: (data: Partial<UserProfile>) => void;
+  updateProfile: (data: Partial<UserProfile>) => Promise<void>;
   clearError: () => void;
 }
 
@@ -71,7 +71,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ token: null, role: "guest", profile: null });
   },
 
-  updateProfile: (data) => {
+  updateProfile: async (data) => {
+    const { token } = get();
+    if (token) {
+      await api.updateProfile(token, data);
+    }
     set((state) => {
       if (!state.profile) return state;
       return { profile: { ...state.profile, ...data } };

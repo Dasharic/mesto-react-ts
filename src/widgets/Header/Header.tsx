@@ -49,7 +49,7 @@ export function Header() {
         ) : (
           <div className={styles.userInfo}>
             <NavLink to="/profile" className={styles.profileLink}>
-              <img src={profile?.avatar} alt="Avatar" className={styles.avatarMini} />
+              <img src={profile?.avatar || "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"} alt="Avatar" className={styles.avatarMini} />
               <span className={styles.userName}>{profile?.name}</span>
             </NavLink>
             <button onClick={handleLogout} className={styles.logoutBtn}>Выйти</button>
