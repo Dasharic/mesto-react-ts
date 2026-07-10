@@ -1,17 +1,14 @@
 .page {
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
   color: white;
 }
 
 .title {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .empty {
   color: #aaa;
-  font-size: 1.2rem;
 }
 
 .container {

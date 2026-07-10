@@ -1,0 +1,112 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: #111;
+  border-bottom: 1px solid #333;
+}
+
+.logoLink {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+}
+
+.link {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: white;
+}
+
+.active {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-bottom: 2px solid #4CAF50;
+  padding-bottom: 5px;
+}
+
+.auth {
+  display: flex;
+  align-items: center;
+}
+
+.loginBtn {
+  background: #4CAF50;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.loginBtn:hover {
+  background: #45a049;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profileLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.profileLink:hover {
+  background: #222;
+}
+
+.avatarMini {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4CAF50;
+}
+
+.userName {
+  color: white;
+  font-weight: bold;
+}
+
+.roleLabel {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.logoutBtn {
+  background: transparent;
+  color: white;
+  border: 1px solid #555;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logoutBtn:hover {
+  background: #333;
+  border-color: white;
+}

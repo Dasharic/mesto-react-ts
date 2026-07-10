@@ -13,6 +13,7 @@ interface TourState {
   // Actions
   fetchTours: () => Promise<void>;
   addTour: (tour: Omit<Tour, "id">) => Promise<void>;
+  deleteTour: (id: number) => Promise<void>;
   
   // User specific actions (we keep them in localStorage tied to token for simplicity)
   loadUserData: () => void;
@@ -38,6 +39,11 @@ export const useTourStore = create<TourState>((set) => ({
   addTour: async (tourData) => {
     const newTour = await api.addTour(tourData);
     set((state) => ({ tours: [newTour, ...state.tours] }));
+  },
+
+  deleteTour: async (id) => {
+    await api.deleteTour(id);
+    set((state) => ({ tours: state.tours.filter((t) => t.id !== id) }));
   },
 
   loadUserData: () => {

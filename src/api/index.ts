@@ -4,7 +4,7 @@ export type Role = "guest" | "user" | "admin";
 export type UserProfile = {
   name: string;
   email: string;
-  avatar: string;
+  avatar?: string;
 };
 
 export type Tour = {
@@ -69,6 +69,16 @@ export const api = {
     return newTour;
   },
 
+  async deleteTour(id: number): Promise<void> {
+    await delay(300);
+    const saved = localStorage.getItem("tours");
+    if (!saved) return;
+    const tours: Tour[] = JSON.parse(saved);
+    const newTours = tours.filter(t => t.id !== id);
+    localStorage.setItem("tours", JSON.stringify(newTours));
+  },
+
+
   // --- Auth API ---
   async login(email: string, password: string): Promise<{ token: string; profile: UserProfile; role: Role }> {
     await delay(600);
@@ -103,7 +113,7 @@ export const api = {
       email,
       password,
       role: "user",
-      profile: { name, email, avatar: "https://i.pravatar.cc/150?u=" + email },
+      profile: { name, email },
     };
     users.push(newUser);
     localStorage.setItem("auth_users", JSON.stringify(users));

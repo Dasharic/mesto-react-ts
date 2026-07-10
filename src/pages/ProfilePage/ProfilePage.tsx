@@ -42,7 +42,7 @@ export function ProfilePage() {
       <h1 className={styles.title}>Личный кабинет</h1>
 
       <div className={styles.profileSection}>
-        <img className={styles.avatar} src={profile.avatar} alt={profile.name} />
+        <img className={styles.avatar} src={profile.avatar || "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"} alt={profile.name} />
         
         {isEditing ? (
           <form className={styles.form} onSubmit={handleSave}>
@@ -68,7 +68,6 @@ export function ProfilePage() {
               value={avatar}
               onChange={(e) => setAvatar(e.target.value)}
               placeholder="Ссылка на аватар"
-              required
             />
             <div className={styles.actions}>
               <button className={styles.saveBtn} type="submit">Сохранить</button>

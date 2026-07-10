@@ -4,7 +4,7 @@ import { useAuthStore } from "../../store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
 
 export function HomePage() {
-  const { tours, cart, favorites, toggleFavorite, addToCart, removeFromCart } = useTourStore();
+  const { tours, cart, favorites, toggleFavorite, addToCart, removeFromCart, deleteTour } = useTourStore();
   const { role } = useAuthStore();
   const navigate = useNavigate();
 
@@ -50,6 +50,20 @@ export function HomePage() {
             >
               ♥
             </button>
+            {role === "admin" && (
+              <button
+                className={styles.deleteBtn}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (confirm("Вы уверены, что хотите удалить тур?")) {
+                    deleteTour(tour.id);
+                  }
+                }}
+                title="Удалить тур"
+              >
+                🗑️
+              </button>
+            )}
             <img className={styles.image} src={tour.image} alt={tour.title} />
             <div className={styles.info}>
               <div className={styles.infoText}>

@@ -94,6 +94,29 @@
   color: red;
 }
 
+.deleteBtn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(244, 67, 54, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.deleteBtn:hover {
+  background: rgba(244, 67, 54, 1);
+}
+
 .cartIconBtn {
   background: #333;
   border: none;
