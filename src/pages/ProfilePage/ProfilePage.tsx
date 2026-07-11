@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-import { useStore } from "../../contexts/StoreContext";
+import { useAuthStore } from "../../store/useAuthStore";
+import { useTourStore } from "../../store/useTourStore";
 import styles from "./ProfilePage.module.css";
 import { Link } from "react-router-dom";
 
 export function ProfilePage() {
-  const { profile, role, updateProfile } = useAuth();
-  const { orders } = useStore();
+  const { profile, role, updateProfile } = useAuthStore();
+  const { orders } = useTourStore();
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(profile?.name || "");
   const [email, setEmail] = useState(profile?.email || "");
@@ -40,13 +40,36 @@ export function ProfilePage() {
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>Личный кабинет</h1>
+
       <div className={styles.profileSection}>
         <img className={styles.avatar} src={profile.avatar} alt={profile.name} />
+        
         {isEditing ? (
           <form className={styles.form} onSubmit={handleSave}>
-            <input className={styles.input} type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-            <input className={styles.input} type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            <input className={styles.input} type="url" value={avatar} onChange={(e) => setAvatar(e.target.value)} required />
+            <input
+              className={styles.input}
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Имя"
+              required
+            />
+            <input
+              className={styles.input}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              required
+            />
+            <input
+              className={styles.input}
+              type="url"
+              value={avatar}
+              onChange={(e) => setAvatar(e.target.value)}
+              placeholder="Ссылка на аватар"
+              required
+            />
             <div className={styles.actions}>
               <button className={styles.saveBtn} type="submit">Сохранить</button>
               <button className={styles.cancelBtn} type="button" onClick={() => setIsEditing(false)}>Отмена</button>
@@ -61,6 +84,7 @@ export function ProfilePage() {
           </div>
         )}
       </div>
+
       <div className={styles.ordersSection}>
         <h2>История заказов</h2>
         {orders.length === 0 ? (

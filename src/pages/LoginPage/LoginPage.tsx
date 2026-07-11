@@ -1,26 +1,21 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuthStore } from "../../store/useAuthStore";
 import { Button } from "../../ui/Button/Button";
 import { Input } from "../../ui/Input/Input";
 import styles from "./LoginPage.module.css";
 
 export function LoginPage() {
-  const { login } = useAuth();
+  const { login, error, clearError, isLoading } = useAuthStore();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    const success = login(email, password);
-    if (success) {
-      navigate("/");
-    } else {
-      setError("Неверный email или пароль");
-    }
+    clearError();
+    const success = await login(email, password);
+    if (success) navigate("/");
   };
 
   return (
@@ -46,8 +41,8 @@ export function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <Button type="submit">
-            Войти
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Загрузка..." : "Войти"}
           </Button>
         </form>
 
