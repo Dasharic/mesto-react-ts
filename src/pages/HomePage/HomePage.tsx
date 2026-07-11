@@ -1,11 +1,11 @@
 import styles from "./HomePage.module.css";
-import { useStore } from "../../contexts/StoreContext";
-import { useAuth } from "../../contexts/AuthContext";
+import { useTourStore } from "../../store/useTourStore";
+import { useAuthStore } from "../../store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
 
 export function HomePage() {
-  const { tours, cart, favorites, toggleFavorite, addToCart } = useStore();
-  const { role } = useAuth();
+  const { tours, cart, favorites, toggleFavorite, addToCart, removeFromCart } = useTourStore();
+  const { role } = useAuthStore();
   const navigate = useNavigate();
 
   const handleFavoriteClick = (e: React.MouseEvent, tourId: number) => {
@@ -25,7 +25,12 @@ export function HomePage() {
     }
     const tour = tours.find(t => t.id === tourId);
     if (!tour) return;
-    addToCart(tour);
+
+    if (cart.find(c => c.id === tourId)) {
+      removeFromCart(tourId);
+    } else {
+      addToCart(tour);
+    }
   };
 
   return (
@@ -35,33 +40,34 @@ export function HomePage() {
         {tours.map((tour) => {
           const inCart = cart.some(c => c.id === tour.id);
           return (
-            <Link key={tour.id} to={`/tour/${tour.id}`} className={styles.card}>
-              <button
-                className={`${styles.favoriteBtn} ${
-                  favorites.includes(tour.id) ? styles.active : ""
-                }`}
-                onClick={(e) => handleFavoriteClick(e, tour.id)}
-              >
-                \u2665
-              </button>
-              <img className={styles.image} src={tour.image} alt={tour.title} />
-              <div className={styles.info}>
-                <div className={styles.infoText}>
-                  <h3 className={styles.tourTitle}>{tour.title}</h3>
-                  <p className={styles.price}>${tour.price}</p>
-                </div>
-                <button
-                  className={`${styles.cartIconBtn} ${
-                    inCart ? styles.activeCart : ""
-                  }`}
-                  onClick={(e) => handleCartClick(e, tour.id)}
-                >
-                  \uD83D\uDED2
-                </button>
+          <Link key={tour.id} to={`/tour/${tour.id}`} className={styles.card}>
+            <button
+              className={`${styles.favoriteBtn} ${
+                favorites.includes(tour.id) ? styles.active : ""
+              }`}
+              onClick={(e) => handleFavoriteClick(e, tour.id)}
+              title="В избранное"
+            >
+              ♥
+            </button>
+            <img className={styles.image} src={tour.image} alt={tour.title} />
+            <div className={styles.info}>
+              <div className={styles.infoText}>
+                <h3 className={styles.tourTitle}>{tour.title}</h3>
+                <p className={styles.price}>${tour.price}</p>
               </div>
-            </Link>
-          );
-        })}
+              <button
+                className={`${styles.cartIconBtn} ${
+                  inCart ? styles.activeCart : ""
+                }`}
+                onClick={(e) => handleCartClick(e, tour.id)}
+                title={inCart ? "Удалить из корзины" : "Добавить в корзину"}
+              >
+                🛒
+              </button>
+            </div>
+          </Link>
+        )})}
       </div>
     </div>
   );

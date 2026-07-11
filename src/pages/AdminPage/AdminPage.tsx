@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-import { useStore } from "../../contexts/StoreContext";
+import { useAuthStore } from "../../store/useAuthStore";
+import { useTourStore } from "../../store/useTourStore";
 import styles from "./AdminPage.module.css";
 
 export function AdminPage() {
-  const { role } = useAuth();
-  const { addTour } = useStore();
+  const { role } = useAuthStore();
+  const { addTour } = useTourStore();
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
@@ -34,14 +34,45 @@ export function AdminPage() {
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>Панель администратора</h1>
+      
       <div className={styles.formContainer}>
         <h2>Добавить новый тур</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <input className={styles.input} type="text" placeholder="Название тура" value={title} onChange={(e) => setTitle(e.target.value)} required />
-          <input className={styles.input} type="url" placeholder="Ссылка на картинку" value={image} onChange={(e) => setImage(e.target.value)} required />
-          <textarea className={styles.textarea} placeholder="Описание тура" value={description} onChange={(e) => setDescription(e.target.value)} required />
-          <input className={styles.input} type="number" placeholder="Цена ($)" value={price} onChange={(e) => setPrice(e.target.value)} required min="0" />
-          <button className={styles.submitBtn} type="submit">Добавить тур</button>
+          <input
+            className={styles.input}
+            type="text"
+            placeholder="Название тура (например, Рим, Италия)"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+          <input
+            className={styles.input}
+            type="url"
+            placeholder="Ссылка на картинку"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+            required
+          />
+          <textarea
+            className={styles.textarea}
+            placeholder="Описание тура"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+          <input
+            className={styles.input}
+            type="number"
+            placeholder="Цена ($)"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            required
+            min="0"
+          />
+          <button className={styles.submitBtn} type="submit">
+            Добавить тур
+          </button>
         </form>
       </div>
     </div>

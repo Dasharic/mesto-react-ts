@@ -1,9 +1,9 @@
-import { useStore } from "../../contexts/StoreContext";
+import { useTourStore } from "../../store/useTourStore";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./CartPage.module.css";
 
 export function CartPage() {
-  const { cart, removeFromCart, checkout } = useStore();
+  const { cart, removeFromCart, checkout } = useTourStore();
   const navigate = useNavigate();
 
   const total = cart.reduce((sum, item) => sum + item.price, 0);
@@ -31,7 +31,10 @@ export function CartPage() {
                   </Link>
                   <p className={styles.price}>${item.price}</p>
                 </div>
-                <button className={styles.removeBtn} onClick={() => removeFromCart(item.id)}>
+                <button
+                  className={styles.removeBtn}
+                  onClick={() => removeFromCart(item.id)}
+                >
                   Удалить
                 </button>
               </div>

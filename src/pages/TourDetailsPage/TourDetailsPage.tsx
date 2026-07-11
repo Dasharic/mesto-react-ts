@@ -1,13 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useStore } from "../../contexts/StoreContext";
-import { useAuth } from "../../contexts/AuthContext";
+import { useTourStore } from "../../store/useTourStore";
+import { useAuthStore } from "../../store/useAuthStore";
 import styles from "./TourDetailsPage.module.css";
 
 export function TourDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { tours, cart, favorites, addToCart, removeFromCart, toggleFavorite } = useStore();
-  const { role } = useAuth();
+  const { tours, cart, favorites, addToCart, removeFromCart, toggleFavorite } = useTourStore();
+  const { role } = useAuthStore();
 
   const tour = tours.find((t) => t.id === Number(id));
 
@@ -63,7 +63,7 @@ export function TourDetailsPage() {
               className={`${styles.actionBtn} ${styles.favBtn} ${isFavorite ? styles.activeFav : ""}`}
               onClick={handleFavoriteClick}
             >
-              {isFavorite ? "В избранном \u2665" : "В избранное \u2661"}
+              {isFavorite ? "В избранном ♥" : "В избранное ♡"}
             </button>
           </div>
         </div>
