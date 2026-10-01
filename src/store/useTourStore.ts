@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { api } from "../api";
 import type { Tour, Order } from "../api";
-import { useAuthStore } from "./useAuthStore";
 
 interface TourState {
   tours: Tour[];
@@ -15,12 +14,12 @@ interface TourState {
   addTour: (tour: Omit<Tour, "id">) => Promise<void>;
   deleteTour: (id: number) => Promise<void>;
   
-  // User specific actions (we keep them in localStorage tied to token for simplicity)
-  loadUserData: () => void;
-  addToCart: (tour: Tour) => void;
-  removeFromCart: (tourId: number) => void;
-  toggleFavorite: (tourId: number) => void;
-  checkout: () => void;
+  // User specific actions
+  loadUserData: () => Promise<void>;
+  addToCart: (tour: Tour) => Promise<void>;
+  removeFromCart: (tourId: number) => Promise<void>;
+  toggleFavorite: (tourId: number) => Promise<void>;
+  checkout: () => Promise<void>;
 }
 
 export const useTourStore = create<TourState>((set) => ({
@@ -32,8 +31,11 @@ export const useTourStore = create<TourState>((set) => ({
 
   fetchTours: async () => {
     set({ isLoading: true });
-    const tours = await api.fetchTours();
-    set({ tours, isLoading: false });
+    try {
+      const tours = await api.fetchTours();
+      set({ tours });
+    } catch(e) { console.error(e) }
+    set({ isLoading: false });
   },
 
   addTour: async (tourData) => {
@@ -46,66 +48,36 @@ export const useTourStore = create<TourState>((set) => ({
     set((state) => ({ tours: state.tours.filter((t) => t.id !== id) }));
   },
 
-  loadUserData: () => {
-    const token = useAuthStore.getState().token;
-    if (!token) {
+  loadUserData: async () => {
+    try {
+      const [cart, favorites, orders] = await Promise.all([
+        api.getCart(),
+        api.getFavorites(),
+        api.getOrders()
+      ]);
+      set({ cart, favorites, orders });
+    } catch (e) {
       set({ cart: [], favorites: [], orders: [] });
-      return;
     }
-    const suffix = `_${token}`;
-    const cart = JSON.parse(localStorage.getItem(`cart${suffix}`) || "[]");
-    const favs = JSON.parse(localStorage.getItem(`favorites${suffix}`) || "[]");
-    const orders = JSON.parse(localStorage.getItem(`orders${suffix}`) || "[]");
-    set({ cart, favorites: favs, orders });
   },
 
-  addToCart: (tour) => {
-    set((state) => {
-      if (state.cart.find(c => c.id === tour.id)) return state;
-      const newCart = [...state.cart, tour];
-      const token = useAuthStore.getState().token;
-      if (token) localStorage.setItem(`cart_${token}`, JSON.stringify(newCart));
-      return { cart: newCart };
-    });
+  addToCart: async (tour) => {
+    await api.addToCart(tour.id);
+    set((state) => ({ cart: [...state.cart, tour] }));
   },
 
-  removeFromCart: (tourId) => {
-    set((state) => {
-      const newCart = state.cart.filter(c => c.id !== tourId);
-      const token = useAuthStore.getState().token;
-      if (token) localStorage.setItem(`cart_${token}`, JSON.stringify(newCart));
-      return { cart: newCart };
-    });
+  removeFromCart: async (tourId) => {
+    await api.removeFromCart(tourId);
+    set((state) => ({ cart: state.cart.filter(c => c.id !== tourId) }));
   },
 
-  toggleFavorite: (tourId) => {
-    set((state) => {
-      const newFavs = state.favorites.includes(tourId)
-        ? state.favorites.filter(id => id !== tourId)
-        : [...state.favorites, tourId];
-      const token = useAuthStore.getState().token;
-      if (token) localStorage.setItem(`favorites_${token}`, JSON.stringify(newFavs));
-      return { favorites: newFavs };
-    });
+  toggleFavorite: async (tourId) => {
+    const { favorites } = await api.toggleFavorite(tourId);
+    set({ favorites });
   },
 
-  checkout: () => {
-    set((state) => {
-      if (state.cart.length === 0) return state;
-      const total = state.cart.reduce((sum, item) => sum + item.price, 0);
-      const newOrder: Order = {
-        id: Date.now(),
-        date: new Date().toLocaleDateString(),
-        items: [...state.cart],
-        total,
-      };
-      const newOrders = [newOrder, ...state.orders];
-      const token = useAuthStore.getState().token;
-      if (token) {
-        localStorage.setItem(`orders_${token}`, JSON.stringify(newOrders));
-        localStorage.setItem(`cart_${token}`, "[]");
-      }
-      return { orders: newOrders, cart: [] };
-    });
+  checkout: async () => {
+    const newOrder = await api.checkout();
+    set((state) => ({ orders: [newOrder, ...state.orders], cart: [] }));
   },
 }));

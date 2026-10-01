@@ -16,7 +16,7 @@ export function ProfilePage() {
     if (profile) {
       setName(profile.name);
       setEmail(profile.email);
-      setAvatar(profile.avatar);
+      setAvatar(profile.avatar || "");
     }
   }, [profile]);
 
