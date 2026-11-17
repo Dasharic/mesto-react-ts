@@ -1,0 +1,83 @@
+# ===========================================
+# Docker Compose: Mesto (App + PostgreSQL + Redis)
+# ===========================================
+
+services:
+  # ---------- Backend API ----------
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mesto-app
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=postgresql://mesto:mesto_secret@postgres:5432/mesto_db
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - mesto-network
+
+  # ---------- PostgreSQL ----------
+  postgres:
+    image: postgres:16-alpine
+    container_name: mesto-postgres
+    environment:
+      POSTGRES_DB: mesto_db
+      POSTGRES_USER: mesto
+      POSTGRES_PASSWORD: mesto_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mesto -d mesto_db"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - mesto-network
+
+  # ---------- Redis ----------
+  redis:
+    image: redis:7-alpine
+    container_name: mesto-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/var/lib/redis/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      start_period: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - mesto-network
+
+# ---------- Persistent Volumes ----------
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# ---------- Network ----------
+networks:
+  mesto-network:
+    driver: bridge
